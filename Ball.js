@@ -1,7 +1,13 @@
 function Ball()
 {
 	this.ballVector=createVector(random(width), random(height));
-	
+	this.size=random(8, 26);
+
+	this.color=function()
+	{
+		fill(random(255));
+	}
+
 	this.update=function()
 	{
 		if (this.ballVector.x > width)
@@ -27,7 +33,9 @@ function Ball()
 
 	this.show=function()
 	{
-		ellipse(this.ballVector.x, this.ballVector.y, 16, 16);
+		stroke(0);
+		fill(1, 1, 136);
+		ellipse(this.ballVector.x, this.ballVector.y, this.size, this.size);
 		this.ballVector.add(wind);
 	}
 }

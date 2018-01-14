@@ -29,14 +29,13 @@ function show() {
   var json = loadJSON(url, gotWeather, errorCallback);
 }
 
-function errorCallback(data)
+function errorCallback()
 {
-  console.log(data);
   ready=false;
   background(255);
   noLoop();
 
-  alert("Error: "+data.statusText);
+  alert("Error");
 }
 
 function drawArrow()
@@ -70,9 +69,8 @@ function draw() {
       stroke(255);
       fill(255);  
       textSize(26);
-      text(curr_location+', '+curr_country, 20, 40);
-      text(curr_temp+'C', 20, 80);
-      text(curr_wind+'MPH', 60, height-25);
+      text(curr_location+','+curr_country, 20, 40);
+      text(curr_temp+'C,'+curr_wind+"MPH", 20, 80);
     }
 
     drawArrow();
@@ -91,7 +89,7 @@ function draw() {
 }
 
 function gotWeather(weather) {
-  if (weather)
+  if (weather.current.temp_c)
   {
     // Get the angle (convert to radians)
     var angle = radians(Number(weather.current.wind_degree));
@@ -104,10 +102,7 @@ function gotWeather(weather) {
     // Make a vector
     wind = p5.Vector.fromAngle(angle);
 
-    for (i=0; i<50; i++)
-    {
-      balls[i]=new Ball();
-    }
+    balls[i]=new Ball();
     
     ready=true;
     loop();

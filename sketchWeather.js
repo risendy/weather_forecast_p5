@@ -17,7 +17,7 @@ function setup() {
 
   button = createButton('Show');
   button.position(input.x + input.width, height+30);
-  button.mousePressed(show); 
+  button.mousePressed(show);
 
   noLoop();
 }
@@ -60,49 +60,30 @@ function drawArrow()
   pop();
 }
 
-function drawInformation(curr_location, curr_country , curr_temp , curr_wind)
-{
-  rectMode(CORNER);
-  noStroke();
-
-  var firstLine=curr_location+', '+curr_country;
-  var textWidthSize=textWidth(firstLine);
-  var colorRect=color(100,100,100);
-  
-  colorRect.setAlpha(180);
-  
-  fill(colorRect);
-  rect(0, 0, textWidthSize+50, 100, 0, 20, 20, 0);
-
-  fill(255);
-  textSize(26);
-  text(firstLine, 20, 40);
-  text(curr_temp+'C', 20, 80);
-
-  fill(colorRect);
-  rect(0,height-65,200,80, 0, 20, 20);
-  fill(255);
-  text(curr_wind+'MPH', 70, height-25);
-}
-
 function draw() {
   if (ready)
   {   
     background(200);
+
+    drawArrow();
 
     stroke(0);
     fill(51);
 
     for (i=0; i<balls.length; i++)
     {
-      balls[i].update();
+      //balls[i].update();
       balls[i].show();
     }
 
     if (curr_location && curr_country && curr_temp && curr_wind)
     {
-      drawInformation(curr_location, curr_country , curr_temp , curr_wind);
-      drawArrow();
+      stroke(255);
+      fill(255);  
+      textSize(26);
+      text(curr_location+', '+curr_country, 20, 40);
+      text(curr_temp+'C', 20, 80);
+      text(curr_wind+'MPH', 60, height-25);
     }
     
   }

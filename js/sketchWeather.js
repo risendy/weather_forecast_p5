@@ -2,15 +2,16 @@ var input, button, greeting;
 var ready=false;
 var wind;
 var position;
-var curr_location, curr_country, curr_temp;
+var curr_location, curr_country, curr_temp, angle, conditionIcon, conditionText, imageIconObject;
 var balls=[];
+var callMethod = false;
 
 function setup() {
-  createCanvas(window.innerWidth, window.innerHeight-200);
+  createCanvas(window.innerWidth/2, window.innerHeight/2);
 
   wind = createVector();
 
-  createDiv("Your location:", 20, height+10);
+  createDiv("Your location:");
 
   input = createInput();
   input.position(10, height+30);
@@ -60,24 +61,26 @@ function drawArrow()
   pop();
 }
 
-function drawInformation(curr_location, curr_country , curr_temp , curr_wind)
+function drawInformation()
 {
   rectMode(CORNER);
   noStroke();
 
-  var firstLine=curr_location+', '+curr_country;
+  var firstLine=curr_temp+'C, '+curr_location+', '+curr_country;
   var textWidthSize=textWidth(firstLine);
   var colorRect=color(100,100,100);
   
   colorRect.setAlpha(180);
   
   fill(colorRect);
-  rect(0, 0, textWidthSize+50, 100, 0, 20, 20, 0);
+  rect(0, 0, textWidthSize+50, 120, 0, 20, 20, 0);
 
   fill(255);
   textSize(26);
   text(firstLine, 20, 40);
-  text(curr_temp+'C', 20, 80);
+  text(conditionText, 80, 85);
+
+  image(imageIconObject, 12, 45, 64, 64);
 
   fill(colorRect);
   rect(0,height-65,200,80, 0, 20, 20);
@@ -99,12 +102,8 @@ function draw() {
       balls[i].show();
     }
 
-    if (curr_location && curr_country && curr_temp && curr_wind)
-    {
-      drawInformation(curr_location, curr_country , curr_temp , curr_wind);
-      drawArrow();
-    }
-    
+    drawInformation();
+    drawArrow();
   }
 
 }
@@ -112,13 +111,20 @@ function draw() {
 function gotWeather(weather) {
   if (weather)
   {
+    callMethod=true;
+
     // Get the angle (convert to radians)
-    var angle = radians(Number(weather.current.wind_degree));
+    angle = radians(Number(weather.current.wind_degree));
+    conditionIcon = "http://"+weather.current.condition.icon;
+    conditionText = weather.current.condition.text;
 
     curr_temp=floor(weather.current.temp_c);
     curr_location=weather.location.name;
     curr_country=weather.location.country;
     curr_wind=Number(weather.current.wind_mph);
+
+    imageIconObject = createImg(conditionIcon);
+    imageIconObject.hide();
 
     // Make a vector
     wind = p5.Vector.fromAngle(angle);
@@ -127,7 +133,7 @@ function gotWeather(weather) {
     {
       balls[i]=new Ball();
     }
-    
+
     ready=true;
     loop();
   }

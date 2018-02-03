@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
+    <meta charset="utf-8" name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
     <style> body {padding: 0; margin: 0;} </style>
     <script src="js/p5.min.js"></script>
     <script src="js/p5.dom.min.js"></script>
     <script src="js/sketchWeather.js"></script>
     <script src="js/Ball.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="css/custom.css">
   </head>
   <body>
     <div id="location">
-      
+      Your location:
+      <input id="locationInput" type="text" name=""> 
+      <button id="showButton">Show</button>
     </div>
   </body>
 </html>

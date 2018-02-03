@@ -5,34 +5,89 @@ var position;
 var curr_location, curr_country, curr_temp, angle, conditionIcon, conditionText, imageIconObject;
 var balls=[];
 var callMethod = false;
+var cities=[];
 
 function setup() {
   createCanvas(window.innerWidth/2, window.innerHeight/2);
 
   wind = createVector();
 
-  createDiv("Your location:");
+  input = $('#locationInput');
+  button = $('#showButton');
 
-  input = createInput();
-  input.position(10, height+30);
+  $("#locationInput").autocomplete({
+    source :function( request, response ) {
+      $.ajax({
+       url: "https://api.apixu.com/v1/search.json?key=513d8003c8b348f1a2461629162106",
+       dataType: "json",
+       data: {
+        q: request.term
+      },
+      success: function( data ) {
+        if(!data.length){
 
-  button = createButton('Show');
-  button.position(input.x + input.width, height+30);
-  button.mousePressed(show); 
+          var result = [
+          {
+           label: 'No matches found', 
+           value: response.term
+         }
+         ];
+
+         response(result);
+       }
+       else {
+        response($.map(data, function(item) {
+          var arr=item.name.split(",");
+
+          return {
+            label : item.name,
+            value : arr[0]
+          };
+        }));
+      }
+
+    }
+  });
+    },
+    select: function (event, ui) {
+     $("#locationInput").val(ui.item.label);
+     $("#locationInput").attr("data-search", ui.item.value);
+     return false;
+   }
+ });
+
+  button.click(function(event) {
+    loadCurrentWeather();
+  });
 
   noLoop();
 }
 
-function show() {
-  var location=input.value();
-  var url = 'https://api.apixu.com/v1/current.json?key=513d8003c8b348f1a2461629162106&q='+location+'';
+function clearHtml()
+{
+  $('#locationInput').val("");
+  $('#locationInput').attr("data-search", "");
+}
 
-  var json = loadJSON(url, gotWeather, errorCallback);
+function loadCurrentWeather() {
+  var location=input.attr("data-search");
+
+  if (location)
+  {
+    var url = 'http://api.apixu.com/v1/current.json?key=513d8003c8b348f1a2461629162106&q='+location+'';
+    var json = loadJSON(url, gotWeather, errorCallback);
+
+    clearHtml();
+  }
+  else
+  {
+    alert("Please select an option from the list");
+  }
+  
 }
 
 function errorCallback(data)
 {
-  console.log(data);
   ready=false;
   background(255);
   noLoop();

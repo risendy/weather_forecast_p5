@@ -7,9 +7,10 @@ var balls=[];
 var callMethod = false;
 var cities=[];
 var forecast=[];
+var imageIconObject2, imageIconObject3, imageIconObject4, imageIconObject5;
 
 function setup() {
-  createCanvas(window.innerWidth/2, window.innerHeight/2);
+  createCanvas(displayWidth, window.innerHeight/2);
 
   initAutocomplete();
 
@@ -78,12 +79,6 @@ function initAutocomplete()
   });
 }
 
-function clearHtml()
-{
-  $('#locationInput').val("");
-  $('#locationInput').attr("data-search", "");
-}
-
 function loadCurrentWeather() {
   var location=input.attr("data-search");
 
@@ -91,8 +86,6 @@ function loadCurrentWeather() {
   {
     var url = 'http://api.apixu.com/v1/current.json?key=513d8003c8b348f1a2461629162106&q='+location+'';
     var json = loadJSON(url, gotCurrentWeather, errorCallback);
-
-    clearHtml();
   }
   else
   {
@@ -102,30 +95,75 @@ function loadCurrentWeather() {
 }
 
 function loadForecast() {
-    var url = 'http://api.apixu.com/v1/forecast.json?key=513d8003c8b348f1a2461629162106&q='+location+'&days=4';
-    var json = loadJSON(url, gotWeatherForecast, errorCallback2);
+    var location=input.attr("data-search");
+
+    if (location)
+    {
+      var urlForecast = 'http://api.apixu.com/v1/forecast.json?key=513d8003c8b348f1a2461629162106&q='+location+'&days=5';
+      var jsonForecast = loadJSON(urlForecast, gotWeatherForecast, errorCallback2);
+    }
+    
 }
 
-function errorCallback(data)
-{
-  console.log(data);
-  ready=false;
-  background(255);
-  noLoop();
 
-  alert("Error1: "+data.statusText);
+function gotCurrentWeather(weather) {
+  if (weather)
+  {
+    callMethod=true;
+
+    // Get the angle (convert to radians)
+    angle = radians(Number(weather.current.wind_degree));
+    conditionIcon = "http://"+weather.current.condition.icon;
+    conditionText = weather.current.condition.text;
+
+    curr_temp=floor(weather.current.temp_c);
+    curr_location=weather.location.name;
+    curr_country=weather.location.country;
+    curr_wind=Number(weather.current.wind_mph);
+
+    imageIconObject = createImg(conditionIcon);
+    imageIconObject.hide();
+
+    // Make a vector
+    wind = p5.Vector.fromAngle(angle);
+
+    for (i=0; i<25; i++)
+    {
+      balls[i]=new Ball();
+    }
+
+    loadForecast();
+  }
+  
 }
 
-function errorCallback2(data)
-{
-  console.log(data);
-  ready=false;
-  background(255);
-  noLoop();
+function gotWeatherForecast(weather) {
+  if (weather)
+  {
+    for (j=0; j<weather.forecast.forecastday.length; j++)
+    {
+      forecast[j]={date: weather.forecast.forecastday[j].date, avg_temp:weather.forecast.forecastday[j].day.avgtemp_c, iconUrl:"http://"+weather.forecast.forecastday[j].day.condition.icon};
+    }
 
-  alert("Error2: "+data.statusText);
+    imageIconObject2 = createImg(forecast[1].iconUrl);
+    imageIconObject2.hide();
+
+    imageIconObject3 = createImg(forecast[2].iconUrl);
+    imageIconObject3.hide();
+
+    imageIconObject4 = createImg(forecast[3].iconUrl);
+    imageIconObject4.hide();
+
+    imageIconObject5 = createImg(forecast[4].iconUrl);
+    imageIconObject5.hide();
+
+    clearHtml();
+
+    ready=true;
+    loop();
+  }
+  
 }
-
 
 function drawArrow()
 {
@@ -177,23 +215,66 @@ function drawInformation()
   if (forecast.length>0)
   {
     fill(colorRect);
-    rect(width/2+20, height-65, 350, 80, 20, 20, 20, 20);
+    rect(width/1.5, height-65, width, 80, 20, 20, 20, 20);
     fill(255);
     textSize(16);
-    text(forecast[1].date, 380, height-40);
-    text(forecast[1].avg_temp+"°", 380, height-20);
 
-    text(forecast[2].date, 480, height-40);
-    text(forecast[2].avg_temp+"°", 480, height-20);
+    textStyle(BOLD);
+    text(forecast[1].date, width/1.5+20, height-40);
+    text(forecast[2].date, width/1.5+130, height-40);
+    text(forecast[3].date, width/1.5+240, height-40);
+    text(forecast[4].date, width/1.5+355, height-40);
 
-    text(forecast[3].date, 580, height-40);
-    text(forecast[3].avg_temp+"°", 580, height-20);
+    textStyle(NORMAL);
+
+    text(forecast[1].avg_temp+"°", width/1.5+20, height-20);
+
+    image(imageIconObject2, width/1.5+65, height-35, 32, 32);
+    
+    text(forecast[2].avg_temp+"°", width/1.5+130, height-20);
+
+    image(imageIconObject3, width/1.5+175, height-35, 32, 32);
+
+    text(forecast[3].avg_temp+"°", width/1.5+240, height-20);
+
+    image(imageIconObject4, width/1.5+285, height-35, 32, 32);
+    
+    text(forecast[4].avg_temp+"°", width/1.5+355, height-20);
+
+    image(imageIconObject5, width/1.5+400, height-35, 32, 32);
 
     stroke(60);
-    line(width/2+130, height-65, width/2+130, height);
-    line(width/2+230, height-65, width/2+230, height);
+    line(width/1.5+115, height-65, width/1.5+115, height);
+    line(width/1.5+225, height-65, width/1.5+225, height);
+    line(width/1.5+338, height-65, width/1.5+338, height);
   }
  
+}
+
+function errorCallback(data)
+{
+  console.log(data);
+  ready=false;
+  background(255);
+  noLoop();
+
+  alert("Error1: "+data.statusText);
+}
+
+function errorCallback2(data)
+{
+  console.log(data);
+  ready=false;
+  background(255);
+  noLoop();
+
+  alert("Error2: "+data.statusText);
+}
+
+function clearHtml()
+{
+  $('#locationInput').val("");
+  $('#locationInput').attr("data-search", "");
 }
 
 function draw() {
@@ -214,49 +295,4 @@ function draw() {
     drawArrow();
   }
 
-}
-
-function gotCurrentWeather(weather) {
-  if (weather)
-  {
-    callMethod=true;
-
-    // Get the angle (convert to radians)
-    angle = radians(Number(weather.current.wind_degree));
-    conditionIcon = "http://"+weather.current.condition.icon;
-    conditionText = weather.current.condition.text;
-
-    curr_temp=floor(weather.current.temp_c);
-    curr_location=weather.location.name;
-    curr_country=weather.location.country;
-    curr_wind=Number(weather.current.wind_mph);
-
-    imageIconObject = createImg(conditionIcon);
-    imageIconObject.hide();
-
-    // Make a vector
-    wind = p5.Vector.fromAngle(angle);
-
-    for (i=0; i<50; i++)
-    {
-      balls[i]=new Ball();
-    }
-
-    loadForecast();
-  }
-  
-}
-
-function gotWeatherForecast(weather) {
-  if (weather)
-  {
-    for (j=0; j<weather.forecast.forecastday.length; j++)
-    {
-      forecast[j]={date: weather.forecast.forecastday[j].date, avg_temp:weather.forecast.forecastday[j].day.avgtemp_c};
-    }
-
-    ready=true;
-    loop();
-  }
-  
 }

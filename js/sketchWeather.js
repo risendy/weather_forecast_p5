@@ -10,7 +10,8 @@ var forecast=[];
 var imageIconObject2, imageIconObject3, imageIconObject4, imageIconObject5;
 
 function setup() {
-  createCanvas(displayWidth, window.innerHeight/2);
+  noLoop();
+  createCanvas(window.innerWidth, window.innerHeight/2);
 
   initAutocomplete();
 
@@ -20,10 +21,14 @@ function setup() {
   button = $('#showButton');
 
   button.click(function(event) {
-    loadCurrentWeather();
-  });
+    $.when(loadCurrentWeather(), loadForecast()).then(function (resp1, resp2) {
+       clearHtml();
 
-  noLoop();
+       ready=true;
+    })
+
+});
+
 }
 
 function initAutocomplete()
@@ -131,8 +136,6 @@ function gotCurrentWeather(weather) {
     {
       balls[i]=new Ball();
     }
-
-    loadForecast();
   }
   
 }
@@ -157,9 +160,6 @@ function gotWeatherForecast(weather) {
     imageIconObject5 = createImg(forecast[4].iconUrl);
     imageIconObject5.hide();
 
-    clearHtml();
-
-    ready=true;
     loop();
   }
   
@@ -253,7 +253,6 @@ function drawInformation()
 
 function errorCallback(data)
 {
-  console.log(data);
   ready=false;
   background(255);
   noLoop();
@@ -263,7 +262,6 @@ function errorCallback(data)
 
 function errorCallback2(data)
 {
-  console.log(data);
   ready=false;
   background(255);
   noLoop();

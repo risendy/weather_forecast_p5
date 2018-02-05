@@ -133,14 +133,10 @@ function gotCurrentWeather(weather) {
     imageIconObject = createImg(conditionIcon);
     imageIconObject.hide();
 
-    // Make a vector
-    wind = p5.Vector.fromAngle(angle);
-
     for (i=0; i<50; i++)
     {
-      balls[i]=new Ball(curr_temp);
+      balls[i]=new Shape(curr_temp, angle);
     }
-
 
     loop();
   }
@@ -172,6 +168,8 @@ function gotWeatherForecast(weather) {
 
 function drawArrow()
 {
+  var wind = p5.Vector.fromAngle(angle);
+
   // This section draws an arrow pointing in the direction of wind
   push();
   translate(32, height - 32);
@@ -262,7 +260,7 @@ function setBackgroundByTemp()
   {
     background(40, 66, 206);
   }
-  else if (curr_temp>0 && curr_temp < 10)
+  else if (curr_temp>=0 && curr_temp < 10)
   {
     background(57, 130, 130);
   }

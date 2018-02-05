@@ -1,11 +1,31 @@
-function Ball()
+function Ball($temp)
 {
 	this.ballVector=createVector(random(width), random(height));
 	this.size=random(8, 26);
+	this.temp=$temp;
 
 	this.color=function()
 	{
-		fill(random(255));
+		if (this.temp<0)
+		{
+			stroke(132, 146, 220);
+			fill(132, 146, 220);
+		}
+		else if (this.temp>=0 && this.temp<10)
+		{
+			stroke(154, 190, 190);
+			fill(154, 190, 190);
+		}
+		else if (this.temp>10 && this.temp<20)
+		{
+			stroke(139, 235, 134);
+			fill(139, 235, 134);
+		}
+		else if (this.temp>20)
+		{
+			stroke(251, 182, 122);
+			fill(251, 182, 122);
+		}
 	}
 
 	this.update=function()
@@ -33,8 +53,7 @@ function Ball()
 
 	this.show=function()
 	{
-		stroke(0);
-		fill(1, 1, 136);
+		this.color();
 		ellipse(this.ballVector.x, this.ballVector.y, this.size, this.size);
 		this.ballVector.add(wind);
 	}

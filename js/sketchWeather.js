@@ -21,10 +21,14 @@ function setup() {
   button = $('#showButton');
 
   button.click(function(event) {
-    $.when(loadCurrentWeather(), loadForecast()).then(function (resp1, resp2) {
-       clearHtml();
+    $.LoadingOverlay("show");
 
-       ready=true;
+    $.when(loadCurrentWeather(), loadForecast()).then(function (resp1, resp2) {
+      clearHtml();
+
+      ready=true;
+
+      $.LoadingOverlay("hide");
     })
 
 });
@@ -132,10 +136,13 @@ function gotCurrentWeather(weather) {
     // Make a vector
     wind = p5.Vector.fromAngle(angle);
 
-    for (i=0; i<25; i++)
+    for (i=0; i<50; i++)
     {
-      balls[i]=new Ball();
+      balls[i]=new Ball(curr_temp);
     }
+
+
+    loop();
   }
   
 }
@@ -159,8 +166,6 @@ function gotWeatherForecast(weather) {
 
     imageIconObject5 = createImg(forecast[4].iconUrl);
     imageIconObject5.hide();
-
-    loop();
   }
   
 }
@@ -251,6 +256,26 @@ function drawInformation()
  
 }
 
+function setBackgroundByTemp()
+{
+  if (curr_temp<0)
+  {
+    background(40, 66, 206);
+  }
+  else if (curr_temp>0 && curr_temp < 10)
+  {
+    background(57, 130, 130);
+  }
+  else if (curr_temp>10 && curr_temp<20)
+  {
+    background(72, 166, 88);
+  }
+  else if (curr_temp>20)
+  {
+    background(222, 134, 58);
+  }
+}
+
 function errorCallback(data)
 {
   ready=false;
@@ -262,6 +287,8 @@ function errorCallback(data)
 
 function errorCallback2(data)
 {
+  console.log(data);
+
   ready=false;
   background(255);
   noLoop();
@@ -277,11 +304,8 @@ function clearHtml()
 
 function draw() {
   if (ready)
-  {   
-    background(200);
-
-    stroke(0);
-    fill(51);
+  {  
+    setBackgroundByTemp();
 
     for (i=0; i<balls.length; i++)
     {

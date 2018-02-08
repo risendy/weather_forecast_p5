@@ -22,12 +22,12 @@ function Shape(temp, angle)
 			stroke(154, 190, 190);
 			fill(154, 190, 190);
 		}
-		else if (this.temp>10 && this.temp<20)
+		else if (this.temp>=10 && this.temp<20)
 		{
 			stroke(139, 235, 134);
 			fill(139, 235, 134);
 		}
-		else if (this.temp>20)
+		else if (this.temp>=20)
 		{
 			stroke(251, 182, 122);
 			fill(251, 182, 122);

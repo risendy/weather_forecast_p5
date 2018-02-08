@@ -218,38 +218,33 @@ function drawInformation()
   if (forecast.length>0)
   {
     fill(colorRect);
-    rect(width/1.5, height-65, width, 80, 20, 20, 20, 20);
+    rect(width/1.5+100, height-65, width, 80, 20, 20, 20, 20);
     fill(255);
     textSize(16);
 
     textStyle(BOLD);
-    text(forecast[1].date, width/1.5+20, height-40);
-    text(forecast[2].date, width/1.5+130, height-40);
-    text(forecast[3].date, width/1.5+240, height-40);
-    text(forecast[4].date, width/1.5+355, height-40);
+    text(forecast[1].date, width-380, height-40);
+    text(forecast[2].date, width-250, height-40);
+    text(forecast[3].date, width-120, height-40);
+    //text(forecast[4].date, width/1.5+355, height-40);
 
     textStyle(NORMAL);
 
-    text(forecast[1].avg_temp+"°", width/1.5+20, height-20);
+    text(forecast[1].avg_temp+"°", width-380, height-20);
 
-    image(imageIconObject2, width/1.5+65, height-35, 32, 32);
+    image(imageIconObject2, width-330, height-35, 32, 32);
     
-    text(forecast[2].avg_temp+"°", width/1.5+130, height-20);
+    text(forecast[2].avg_temp+"°", width-250, height-20);
 
-    image(imageIconObject3, width/1.5+175, height-35, 32, 32);
+    image(imageIconObject3, width-200, height-35, 32, 32);
 
-    text(forecast[3].avg_temp+"°", width/1.5+240, height-20);
+    text(forecast[3].avg_temp+"°", width-120, height-20);
 
-    image(imageIconObject4, width/1.5+285, height-35, 32, 32);
-    
-    text(forecast[4].avg_temp+"°", width/1.5+355, height-20);
-
-    image(imageIconObject5, width/1.5+400, height-35, 32, 32);
-
+    image(imageIconObject4, width-70, height-35, 32, 32);
+ 
     stroke(60);
-    line(width/1.5+115, height-65, width/1.5+115, height);
-    line(width/1.5+225, height-65, width/1.5+225, height);
-    line(width/1.5+338, height-65, width/1.5+338, height);
+    line(width-275, height-65, width-275, height);
+    line(width-145, height-65, width-145, height);
   }
  
 }

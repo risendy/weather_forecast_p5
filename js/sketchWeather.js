@@ -259,11 +259,11 @@ function setBackgroundByTemp()
   {
     background(57, 130, 130);
   }
-  else if (curr_temp>10 && curr_temp<20)
+  else if (curr_temp>=10 && curr_temp<20)
   {
     background(72, 166, 88);
   }
-  else if (curr_temp>20)
+  else if (curr_temp>=20)
   {
     background(222, 134, 58);
   }

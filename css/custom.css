@@ -2,3 +2,12 @@
 	position: absolute;
 	bottom: 40%;
 }
+
+canvas {
+	margin-top:55px;
+}
+.ui-front { z-index: 9999; }
+
+#locationInput {
+	width: 400px;
+}

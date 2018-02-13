@@ -84,7 +84,7 @@ function initAutocomplete()
       $("#locationInput").val(ui.item.label);
       $("#locationInput").attr("data-search", ui.item.value);
       return false;
-    }
+    },
   });
 }
 
@@ -218,7 +218,7 @@ function drawInformation()
   if (forecast.length>0)
   {
     fill(colorRect);
-    rect(width/1.5+100, height-65, width, 80, 20, 20, 20, 20);
+    rect(width-420, height-65, width, 80, 20, 20, 20, 20);
     fill(255);
     textSize(16);
 
